@@ -86,7 +86,14 @@ namespace TeamCityWatcher
         private void ShowHelp()
         {
             var helpFormatter = new HelpFormatter();
-            helpFormatter.PrintHelp("TeamCityWatcher", _options);
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Several servers can be passed.");
+            sb.AppendLine("Example:");
+            sb.AppendLine("Running for one hour (60 minutes) and using COM-Port 'COM3'");
+            sb.AppendLine("The used server is 192.168.1.12:8080, user: 'admin' and password: 'adminadmin':");
+            sb.AppendLine(String.Format("TeamCityWatcher -{0} 60 -{1} COM3", RunTime, Port));
+            sb.AppendLine(String.Format("-{0} 192.168.1.12:8080,admin,adminadmin", Server)); 
+            helpFormatter.PrintHelp("TeamCityWatcher", "Parameters for the TeamCityWatcher", _options, sb.ToString());
             Environment.Exit(1);
         }
     }
