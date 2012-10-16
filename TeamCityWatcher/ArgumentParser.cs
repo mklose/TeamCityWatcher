@@ -57,7 +57,6 @@ namespace TeamCityWatcher
             if (commandLine.HasOption(Help))
             {
                 ShowHelp();
-                Environment.Exit(1);
             }
         }
 
@@ -88,6 +87,7 @@ namespace TeamCityWatcher
         {
             var helpFormatter = new HelpFormatter();
             helpFormatter.PrintHelp("TeamCityWatcher", _options);
+            Environment.Exit(1);
         }
     }
 }
