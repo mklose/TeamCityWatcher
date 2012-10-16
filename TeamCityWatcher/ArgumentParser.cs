@@ -8,6 +8,7 @@ namespace TeamCityWatcher
     {
         private readonly Options _options;
         private readonly Option _serverOption;
+        private readonly Option _helpOption;
         private const string RunTime = "runTime";
         private const string Port = "port";
         private const string Help = "help";
@@ -28,9 +29,8 @@ namespace TeamCityWatcher
                                   .WithArgName(Port)
                                   .WithDescription("Setzt den COM-Port")
                                   .Create(Port));
-            _options.AddOption(OptionBuilder.Factory
-                                  .WithDescription("Zeigt die Hilfe zu den Befehlen an.")
-                                  .Create(Help));
+            _helpOption = OptionBuilder.Factory.WithDescription("Zeigt die Hilfe zu den Befehlen an.").Create(Help);
+            _options.AddOption(_helpOption);
             _serverOption = OptionBuilder.Factory.WithArgName("url,user,password")
                 .HasArgs(3).IsRequired().WithValueSeparator(Convert.ToChar(","))
                 .WithDescription("Referenz zum TeamCity server").Create(Server);
@@ -39,15 +39,26 @@ namespace TeamCityWatcher
 
         public void Parse(string[] args)
         {
+            ParseHelp(args);
             Servers = new List<TeamCityServer>();
             var commandLine = new GnuParser().Parse(_options, args);
-            if (commandLine.HasOption(Help))
-                ShowHelp();
             ComPort = commandLine.GetOptionValue(Port);
             Console.WriteLine("Using port: " + ComPort);
             RunTimeMinutes = int.Parse(commandLine.GetOptionValue(RunTime));
             Console.WriteLine(String.Format("Running for {0} minutes", RunTimeMinutes));
             ParseServers(args);
+        }
+
+        private void ParseHelp(string[] args)
+        {
+            var options = new Options();
+            options.AddOption(_helpOption);
+            var commandLine = new GnuParser().Parse(options, args);
+            if (commandLine.HasOption(Help))
+            {
+                ShowHelp();
+                Environment.Exit(1);
+            }
         }
 
         private void ParseServers(string[] args)
@@ -76,7 +87,7 @@ namespace TeamCityWatcher
         private void ShowHelp()
         {
             var helpFormatter = new HelpFormatter();
-            helpFormatter.PrintHelp("Abrechnungs-Prüfung", _options);
+            helpFormatter.PrintHelp("TeamCityWatcher", _options);
         }
     }
 }
