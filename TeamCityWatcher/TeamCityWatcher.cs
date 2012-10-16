@@ -9,7 +9,15 @@ namespace TeamCityWatcher
         public static void Main(string[] args)
         {
             var parser = new ArgumentParser();
-            parser.Parse(args);
+            try
+            {
+                parser.Parse(args);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                return;
+            }
             new TeamCityWatcher(parser).Run();
         }
 
