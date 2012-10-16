@@ -54,7 +54,7 @@ namespace TeamCityWatcher
             var options = new Options();
             options.AddOption(_helpOption);
             var commandLine = new GnuParser().Parse(options, args);
-            if (commandLine.HasOption(Help))
+            if (commandLine.HasOption(Help) || args.Length == 0)
             {
                 ShowHelp();
             }
