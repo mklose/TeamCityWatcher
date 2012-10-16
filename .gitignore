@@ -2,3 +2,4 @@ _ReSharper*
 TeamCityWatcher/bin
 TeamCityWatcher/obj
 *.suo
+*.user
