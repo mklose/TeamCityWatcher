@@ -53,6 +53,9 @@ namespace TeamCityWatcher
         {
             var options = new Options();
             options.AddOption(_helpOption);
+            options.AddOption(OptionBuilder.Factory.Create(Port));
+            options.AddOption(OptionBuilder.Factory.Create(RunTime));
+            options.AddOption(OptionBuilder.Factory.Create(Server));
             var commandLine = new GnuParser().Parse(options, args);
             if (commandLine.HasOption(Help) || args.Length == 0)
             {
